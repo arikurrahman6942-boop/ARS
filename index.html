@@ -1,0 +1,2777 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Writing Academy &amp; AI Evaluator</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="apple-touch-icon" href="/logo.svg" />
+  <meta name="theme-color" content="#1F3A5F" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-serif: 'Playfair Display', 'Merriweather', 'Libre Baskerville', Georgia, serif;
+      
+      /* Dark Theme defaults (Classical dark library theme with high contrast) */
+      --bg-color: #0E1B2E;       /* Luxurious deep navy-black */
+      --surface-color: #172A45;
+      --card-color: #1F3A5F;
+      --border-color: #304D75;
+      --text-primary: #F8F5F0;  /* Warm ivory text */
+      --text-secondary: #B0BCCC;
+      
+      --primary-accent: #8B6F47; /* Classic Gold */
+      --secondary-accent: #6E5633;
+      --success-color: #52B788;
+      --warning-color: #F59E0B;
+      --danger-color: #EF4444;
+      
+      --card-radius: 12px;
+      --btn-radius: 8px;
+      --transition-speed: 200ms;
+    }
+
+    /* Light Theme overrides (Modern + Classical Mix) */
+    html[data-theme="light"] {
+      --bg-color: #F8F5F0;     /* Warm Ivory background requested: #F8F5F0 */
+      --surface-color: #FFFFFF;
+      --card-color: #FFFFFF;
+      --border-color: #D8D2C8;  /* Borders: #D8D2C8 */
+      --text-primary: #1F3A5F;  /* Deep Navy: #1F3A5F */
+      --text-secondary: #5C6E84; /* Muted slate body text */
+      
+      --primary-accent: #8B6F47; /* Elegant gold accent requested: #8B6F47 */
+      --secondary-accent: #6E5633;
+      --success-color: #2D6A4F;  /* Success requested: #2D6A4F */
+      --warning-color: #D97706;
+      --danger-color: #991B1B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+      padding-bottom: 80px;
+      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    }
+
+    html[data-theme="light"] body {
+      color: #2C2C2C; /* Soft charcoal body text requested: #2C2C2C */
+    }
+
+    h1, h2, h3, h4, h5, h6, .brand, .section-title, .band-score-num, .hero-headline {
+      font-family: var(--font-serif) !important;
+      color: var(--text-primary) !important;
+      font-weight: 700;
+    }
+
+    /* Full-Screen Hero Premium Section with Cinematic 3D animated background */
+    .hero-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 24px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 45%, #FFFFFF 0%, #FAF8F5 45%, #E9E4DB 100%);
+      z-index: 10;
+      border-bottom: 1px solid var(--border-color);
+      box-sizing: border-box;
+      box-shadow: inset 0 0 100px rgba(139, 111, 71, 0.05);
+    }
+
+    html[data-theme="dark"] .hero-container {
+      background: radial-gradient(circle at 50% 45%, #172A45 0%, #0E1B2E 60%, #050B14 100%);
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 5;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-tag {
+      font-family: var(--font-family);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      color: var(--primary-accent);
+      text-transform: uppercase;
+      margin-bottom: -4px;
+    }
+
+    .hero-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.15;
+      font-weight: 700;
+      color: #1F3A5F; /* Deep Navy */
+      letter-spacing: -0.025em;
+      margin: 0;
+    }
+    html[data-theme="dark"] .hero-headline {
+      color: #F8F5F0;
+    }
+
+    .hero-subtext {
+      font-family: var(--font-family);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      line-height: 1.65;
+      color: #5C6E84;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    html[data-theme="dark"] .hero-subtext {
+      color: #B0BCCC;
+    }
+
+    .hero-cta-btn {
+      font-family: var(--font-family);
+      font-size: 1.05rem;
+      font-weight: 600;
+      background-color: #1F3A5F; /* Deep Navy background */
+      color: #FFFFFF;
+      border: 1px solid #1F3A5F;
+      border-radius: 9999px; /* Rounded corners */
+      padding: 16px 48px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(31, 58, 95, 0.18);
+      transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.02em;
+    }
+    html[data-theme="dark"] .hero-cta-btn {
+      background-color: #8B6F47;
+      border-color: #8B6F47;
+    }
+
+    .hero-cta-btn:hover {
+      background-color: #8B6F47; /* Gold hover effect */
+      border-color: #8B6F47;
+      color: #FFFFFF;
+      box-shadow: 0 6px 24px rgba(139, 111, 71, 0.3);
+      transform: translateY(-2px);
+    }
+    html[data-theme="dark"] .hero-cta-btn:hover {
+      background-color: #F8F5F0;
+      border-color: #F8F5F0;
+      color: #0E1B2E;
+      box-shadow: 0 6px 24px rgba(248, 245, 240, 0.2);
+    }
+
+    .hero-secondary-text {
+      font-family: var(--font-family);
+      font-size: 0.85rem;
+      color: #7A8B9E;
+      letter-spacing: 0.01em;
+      opacity: 0.9;
+    }
+    html[data-theme="dark"] .hero-secondary-text {
+      color: #B0BCCC;
+    }
+
+    /* 3D slow-flowing animated gradient glowing orbs for cinematic depth */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.22;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+      will-change: transform;
+    }
+    html[data-theme="dark"] .orb {
+      mix-blend-mode: screen;
+      opacity: 0.15;
+    }
+
+    .orb-1 {
+      width: clamp(350px, 45vw, 750px);
+      height: clamp(350px, 45vw, 750px);
+      background-color: #1F3A5F; /* Deep Navy */
+      top: -10%;
+      left: -10%;
+      animation: moveOrb1 28s infinite alternate ease-in-out;
+    }
+
+    .orb-2 {
+      width: clamp(300px, 40vw, 650px);
+      height: clamp(300px, 40vw, 650px);
+      background-color: #8B6F47; /* Classic Gold */
+      bottom: -12%;
+      right: -8%;
+      animation: moveOrb2 32s infinite alternate ease-in-out;
+    }
+
+    .orb-3 {
+      width: clamp(320px, 42vw, 700px);
+      height: clamp(320px, 42vw, 700px);
+      background-color: #4C6A92; /* Subtle dark blue */
+      top: 35%;
+      left: 45%;
+      animation: moveOrb3 38s infinite alternate ease-in-out;
+    }
+
+    @keyframes moveOrb1 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(100px, 80px) scale(1.1); }
+      100% { transform: translate(-40px, 140px) scale(0.9); }
+    }
+
+    @keyframes moveOrb2 {
+      0% { transform: translate(0, 0) scale(1.05); }
+      50% { transform: translate(-120px, -90px) scale(0.85); }
+      100% { transform: translate(60px, -40px) scale(1.15); }
+    }
+
+    @keyframes moveOrb3 {
+      0% { transform: translate(0, 0) scale(0.95); }
+      50% { transform: translate(-80px, 120px) scale(1.1); }
+      100% { transform: translate(100px, -60px) scale(0.95); }
+    }
+
+    /* Header / Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background-color: rgba(10, 12, 16, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 32px;
+      transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    }
+    html[data-theme="light"] .navbar {
+      background-color: rgba(245, 247, 250, 0.8);
+    }
+
+    .brand {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--btn-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-speed) ease;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    .theme-toggle:hover {
+      color: var(--text-primary);
+      background-color: var(--surface-color);
+    }
+
+    /* Layout structure */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all var(--transition-speed) ease;
+    }
+    html[data-theme="light"] .card {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Settings section */
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .settings-title {
+      font-weight: 500;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .settings-chevron {
+      color: var(--text-secondary);
+      transition: transform var(--transition-speed) ease;
+    }
+    .settings-chevron.expanded {
+      transform: rotate(180deg);
+    }
+    .settings-status {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 500;
+      background-color: rgba(224, 90, 90, 0.15);
+      color: var(--danger-color);
+    }
+    .settings-status.active {
+      background-color: rgba(45, 212, 160, 0.15);
+      color: var(--success-color);
+    }
+    .settings-body {
+      display: none;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    .settings-body.expanded {
+      display: block;
+    }
+
+    /* Form Design */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .form-control {
+      width: 100%;
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--btn-radius);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      padding: 12px;
+      box-sizing: border-box;
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+      resize: vertical;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 2px rgba(79, 142, 247, 0.15);
+    }
+    .help-text {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+
+    /* Task Selector Tabs */
+    .task-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .task-tab {
+      flex: 1;
+      padding: 12px 16px;
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: var(--btn-radius);
+      color: var(--text-secondary);
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-speed) ease;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .task-tab:hover {
+      border-color: var(--primary-accent);
+      color: var(--text-primary);
+    }
+    .task-tab.active {
+      background-color: var(--primary-accent);
+      border-color: var(--primary-accent);
+      color: #FFFFFF;
+    }
+
+    /* Upload Zone */
+    .drop-zone {
+      border: 1px dashed var(--border-color);
+      border-radius: var(--card-radius);
+      background-color: var(--surface-color);
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      margin-bottom: 6px;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary-accent);
+      background-color: rgba(79, 142, 247, 0.04);
+    }
+    .upload-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .upload-subtext {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* Preview Details */
+    .image-preview-container {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--btn-radius);
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+    .image-preview-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .image-preview-thumbnail {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+    }
+    .image-preview-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      max-width: 250px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .btn-remove-image {
+      background: none;
+      border: none;
+      color: var(--danger-color);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--btn-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--transition-speed) ease;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    .btn-remove-image:hover {
+      background-color: rgba(224, 90, 90, 0.1);
+    }
+
+    /* Word Counter */
+    .word-counter-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .word-counter {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .word-counter.target-met {
+      color: var(--success-color);
+      font-weight: 600;
+    }
+    .target-badge {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background-color: var(--border-color);
+      color: var(--text-secondary);
+    }
+    .target-badge.met {
+      background-color: rgba(45, 212, 160, 0.15);
+      color: var(--success-color);
+    }
+
+    /* Evaluate Button */
+    .btn-evaluate {
+      width: 100%;
+      padding: 16px;
+      background-image: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--card-radius);
+      font-family: var(--font-family);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+    }
+    .btn-evaluate:hover:not(:disabled) {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(124, 92, 252, 0.25);
+    }
+    .btn-evaluate:disabled {
+      background-image: none;
+      background-color: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      animation: rotate 1s linear infinite;
+      width: 20px;
+      height: 20px;
+      display: none;
+    }
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
+    }
+    .spinner circle {
+      stroke: currentColor;
+      stroke-linecap: round;
+      animation: dash 1.5s ease-in-out infinite;
+    }
+    @keyframes dash {
+      0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+      50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+      100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+    }
+
+    /* Inline Alert Box */
+    .alert-banner {
+      display: none;
+      border: 1px solid var(--danger-color);
+      background-color: rgba(224, 90, 90, 0.05);
+      border-radius: var(--card-radius);
+      padding: 16px;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    .alert-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Practice Session Timer Widget */
+    .timer-card {
+      background-color: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all var(--transition-speed) ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    html[data-theme="light"] .timer-card {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+    .timer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 10px;
+    }
+    .timer-task-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .timer-status-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background-color: var(--surface-color);
+      color: var(--text-secondary);
+      letter-spacing: 0.03em;
+    }
+    .timer-status-badge.active {
+      background-color: rgba(82, 183, 136, 0.15);
+      color: var(--success-color);
+    }
+    .timer-status-badge.paused {
+      background-color: rgba(245, 158, 11, 0.15);
+      color: var(--warning-color);
+    }
+    .timer-status-badge.stopped {
+      background-color: rgba(139, 111, 71, 0.15);
+      color: var(--primary-accent);
+    }
+    .timer-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--text-secondary);
+      transition: background-color 0.3s;
+    }
+    .timer-pulse-dot.active {
+      background-color: var(--success-color);
+      animation: pulseActive 1.5s infinite alternate;
+    }
+    .timer-pulse-dot.paused {
+      background-color: var(--warning-color);
+    }
+    .timer-pulse-dot.stopped {
+      background-color: var(--primary-accent);
+    }
+    @keyframes pulseActive {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.25); }
+    }
+    .timer-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .timer-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .timer-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-family: var(--font-family);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      background-color: var(--surface-color);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    .timer-btn:hover:not(:disabled) {
+      background-color: var(--border-color);
+    }
+    .timer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .timer-btn.btn-play {
+      background-color: var(--text-primary);
+      color: var(--bg-color);
+      border-color: var(--text-primary);
+    }
+    .timer-btn.btn-play:hover {
+      background-color: var(--text-secondary);
+    }
+    .timer-btn.btn-stop {
+      color: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+    .timer-btn.btn-stop:hover:not(:disabled) {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+    .timer-btn.btn-delete {
+      color: var(--text-secondary);
+    }
+    .timer-recorded-info {
+      font-family: var(--font-family);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      background-color: var(--surface-color);
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      animation: fadeInLogo 0.5s ease-out;
+    }
+
+    .home-logo-text {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1F3A5F;
+      letter-spacing: -0.01em;
+      transition: color var(--transition-speed);
+    }
+    html[data-theme="dark"] .home-logo-text {
+      color: #F8F5F0;
+    }
+    @keyframes fadeInLogo {
+      from { opacity: 0; transform: scale(0.92) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Results */
+    .results-container {
+      display: none;
+      margin-top: 40px;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 36px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    /* Section 1 - Overall score */
+    .overall-card {
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .overall-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+    }
+    .band-score-num {
+      font-size: 5.5rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin: 12px 0;
+    }
+    .band-scale-bar {
+      position: relative;
+      height: 8px;
+      background-color: var(--border-color);
+      border-radius: 4px;
+      width: 100%;
+      max-width: 380px;
+      margin: 28px auto;
+    }
+    .band-scale-marker {
+      position: absolute;
+      top: -6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 3px solid var(--card-color);
+      transform: translateX(-50%);
+      transition: left 400ms cubic-bezier(0.1, 0.8, 0.3, 1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .band-scale-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 380px;
+      margin: 4px auto 0 auto;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .color-success { color: var(--success-color); }
+    .color-warning { color: var(--warning-color); }
+    .color-danger { color: var(--danger-color); }
+    .bg-success { background-color: var(--success-color); }
+    .bg-warning { background-color: var(--warning-color); }
+    .bg-danger { background-color: var(--danger-color); }
+
+    .overall-summary {
+      max-width: 620px;
+      margin: 20px auto 0 auto;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Section 2 - Criteria cards */
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 640px) {
+      .criteria-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .criteria-card {
+      padding: 20px;
+    }
+    .criteria-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .criteria-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .criteria-band {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .criteria-justification {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Section 3 - Expandable Feedback */
+    .feedback-row {
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 0;
+    }
+    .feedback-row:last-child {
+      border-bottom: none;
+    }
+    .feedback-details {
+      background: none;
+      border: none;
+      width: 100%;
+    }
+    .feedback-details summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+    .feedback-details summary::-webkit-details-marker {
+      display: none;
+    }
+    .feedback-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 16px;
+      padding-right: 8px;
+    }
+    .original-text {
+      text-decoration: underline;
+      text-decoration-color: var(--danger-color);
+      text-decoration-style: dashed;
+      text-underline-offset: 4px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .badge-grammar { background-color: rgba(124, 92, 252, 0.15); color: #786CFA; }
+    .badge-vocabulary { background-color: rgba(79, 142, 247, 0.15); color: #4F8EF7; }
+    .badge-coherence { background-color: rgba(245, 166, 35, 0.15); color: #F5A623; }
+    .badge-task { background-color: rgba(45, 212, 160, 0.15); color: #2DD4A0; }
+
+    .chevron-icon {
+      color: var(--text-secondary);
+      transition: transform var(--transition-speed);
+      flex-shrink: 0;
+    }
+    .feedback-details[open] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .feedback-body {
+      margin-top: 12px;
+      padding: 14px;
+      background-color: var(--surface-color);
+      border-radius: var(--btn-radius);
+      font-size: 0.9rem;
+    }
+    .feedback-issue {
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+    .feedback-issue strong {
+      color: var(--text-primary);
+    }
+    .corrected-box {
+      background-color: rgba(45, 212, 160, 0.08);
+      border-left: 3px solid var(--success-color);
+      padding: 10px 14px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 8px;
+    }
+    .corrected-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--success-color);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .corrected-text {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* Section 4 - Grammar errors list table */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--btn-radius);
+    }
+    .grammar-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .grammar-table th {
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--surface-color);
+    }
+    .grammar-table td {
+      padding: 14px 16px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .grammar-table tr:last-child td {
+      border-bottom: none;
+    }
+    .grammar-table tr:nth-child(even) {
+      background-color: rgba(128, 128, 128, 0.02);
+    }
+
+    /* Section 5 - Strengths */
+    .strengths-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 640px) {
+      .strengths-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .strengths-column {
+      border-left: 3px solid var(--success-color);
+      padding-left: 16px;
+    }
+    .weakness-column {
+      border-left: 3px solid var(--warning-color);
+      padding-left: 16px;
+    }
+    .bullet-list {
+      padding-left: 18px;
+      margin-top: 10px;
+    }
+    .bullet-list li {
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .btn-reset {
+      margin-top: 36px;
+      width: 100%;
+      padding: 14px;
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-weight: 500;
+      border-radius: var(--btn-radius);
+      cursor: pointer;
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      transition: all var(--transition-speed) ease;
+      min-height: 48px;
+    }
+    .btn-reset:hover {
+      background-color: var(--border-color);
+    }
+
+    /* Practice Tracker & Progress Styling */
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      transition: all var(--transition-speed) ease;
+    }
+    .history-item:hover {
+      border-color: var(--primary-accent);
+      background-color: rgba(128, 128, 128, 0.05);
+    }
+    .badge-score {
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+    }
+    .badge-score.score-good {
+      background-color: rgba(45, 212, 160, 0.12);
+      color: var(--success-color);
+      border: 1px solid rgba(45, 212, 160, 0.2);
+    }
+    .badge-score.score-avg {
+      background-color: rgba(245, 158, 11, 0.12);
+      color: var(--warning-color);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .badge-score.score-weak {
+      background-color: rgba(220, 38, 38, 0.12);
+      color: var(--danger-color);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+    .history-action-btn {
+      background: none;
+      border: none;
+      color: var(--primary-accent);
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      transition: background-color var(--transition-speed) ease;
+    }
+    .history-action-btn:hover {
+      background-color: rgba(79, 142, 247, 0.1);
+    }
+    .history-delete-btn {
+      background: none;
+      border: none;
+      color: var(--danger-color);
+      cursor: pointer;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background-color var(--transition-speed) ease;
+    }
+    .history-delete-btn:hover {
+      background-color: rgba(224, 90, 90, 0.1);
+    }
+    .autosave-text {
+      font-size: 0.72rem;
+      color: var(--success-color);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-left: 10px;
+      background-color: rgba(45, 212, 160, 0.1);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .btn-clear-draft {
+      font-size: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all var(--transition-speed) ease;
+    }
+    .btn-clear-draft:hover {
+      color: var(--text-primary);
+      background-color: rgba(128, 128, 128, 0.08);
+    }
+
+    @media (max-width: 640px) {
+      .practice-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+      }
+      #tracker-left {
+        border-right: none !important;
+        padding-right: 0 !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding-bottom: 20px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE VIEW 1: PREMIUM HOME LANDING (3D SHADED BACKGROUND) -->
+  <div id="page-home" style="display: block;">
+    <!-- Homepage Corner Logo Section -->
+    <div style="position: absolute; top: 24px; left: 24px; z-index: 50; display: flex; align-items: center; gap: 12px; pointer-events: auto;">
+      <a href="/" onclick="event.preventDefault(); navigateTo('home')" style="text-decoration: none; display: flex; align-items: center; gap: 12px; cursor: pointer;">
+        <img src="/logo.svg" alt="IELTS Writing Academy Logo" style="width: 42px; height: 42px; filter: drop-shadow(0 4px 10px rgba(139,111,71,0.3)); animate: fadeInLogo 0.8s ease;" referrerpolicy="no-referrer">
+        <span class="home-logo-text">IELTS Writing Academy</span>
+      </a>
+    </div>
+
+    <section class="hero-container">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      
+      <div class="hero-content">
+        <!-- Central Large Crest Logo placed above large title text -->
+        <div style="margin-bottom: 24px; filter: drop-shadow(0 10px 25px rgba(139, 111, 71, 0.22)); animation: fadeInLogo 1.2s ease-out; display: flex; justify-content: center;">
+          <img src="/logo.svg" alt="IELTS Academic Writing Academy Crest Logo Symbol" style="width: 90px; height: 90px;" referrerpolicy="no-referrer">
+        </div>
+
+        <div class="hero-tag">THE PREMIUM WRITING ACADEMY</div>
+        <h1 class="hero-headline">Every Great Score Begins with a Single Essay.</h1>
+        <p class="hero-subtext">
+          Practice IELTS Writing in a focused environment, receive instant evaluation, and improve your essays with intelligent feedback designed to help you achieve your target band score.
+        </p>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 32px; position: relative; z-index: 20;">
+          <button id="btn-start-writing" class="hero-cta-btn">
+            Start Writing
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <span class="hero-secondary-text">No registration. No distractions. Just focused writing practice.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PAGE VIEW 2: DEDICATED EVALUATION APP (SEPARATED VIEW MODE) -->
+  <div id="page-app" style="display: none;">
+    <!-- Header / Navbar -->
+    <header class="navbar">
+      <div class="brand" onclick="navigateTo('home')" style="cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 700; user-select: none;">
+        <!-- Beautiful Academic Custom Logo inline SVG -->
+        <svg viewBox="0 0 100 100" width="36" height="36" style="filter: drop-shadow(0 2px 4px rgba(139, 111, 71, 0.25)); flex-shrink: 0;">
+          <circle cx="50" cy="50" r="45" fill="var(--card-color)" stroke="var(--primary-accent)" stroke-width="2.5" />
+          <circle cx="50" cy="50" r="42" fill="none" stroke="var(--primary-accent)" stroke-width="0.75" stroke-dasharray="2 2" opacity="0.7" />
+          <!-- Quill / Fountain Pen -->
+          <path d="M50,22 L40,48 Q50,46 50,56 Q50,46 60,48 Z" fill="var(--text-primary)" />
+          <!-- Quill Accent Tip (Classic Gold) -->
+          <path d="M50,24 L42,44 L58,44 Z" fill="var(--primary-accent)" />
+          <line x1="50" y1="32" x2="50" y2="58" stroke="var(--card-color)" stroke-width="1.5" />
+          <circle cx="50" cy="38" r="1.5" fill="var(--card-color)" />
+          <!-- Laurels representing Academic Prestige -->
+          <path d="M26,60 C26,72 38,80 50,80 C62,80 74,72 74,60" fill="none" stroke="var(--primary-accent)" stroke-width="2" stroke-linecap="round" />
+          <path d="M47,68 Q50,68 50,65 Q50,68 53,68 Q50,68 50,71 Q50,68 47,68 Z" fill="var(--primary-accent)" />
+        </svg>
+        <span>IELTS Writing Academy</span>
+      </div>
+      <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle display theme">
+        <!-- Sun Icon -->
+        <svg id="theme-icon-sun" style="display: none;" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <!-- Moon Icon -->
+        <svg id="theme-icon-moon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </header>
+
+  <main class="container">
+
+    <!-- Heading Banner -->
+    <div style="margin-bottom: 32px; text-align: center; padding-top: 10px;">
+      <h1 style="font-size: 2.3rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 10px;">Free AI IELTS Band Evaluator</h1>
+      <p style="color: var(--text-secondary); font-size: 1.05rem; max-width: 620px; margin: 0 auto; line-height: 1.5;">
+        Get instant, examiner-level feedback and accurate IELTS band scores for your Academic Writing Task 1 and Task 2 essays. 100% free with no login or setup keys required.
+      </p>
+    </div>
+
+    <!-- Practice Hub & Daily Tracker Portal -->
+    <div class="card" id="practice-hub-card" style="margin-bottom: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+        <h2 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--primary-accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Practice Hub & Daily Progress
+        </h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Daily Goal Target:</span>
+          <select id="daily-goal-select" class="form-control" style="width: auto; padding: 4px 10px; font-size: 0.85rem; min-height: auto; height: 32px; border-radius: 6px;" onchange="updateDailyGoalTarget(this.value)">
+            <option value="3">3 Essays / Day</option>
+            <option value="5" selected>5 Essays / Day</option>
+            <option value="8">8 Essays / Day</option>
+            <option value="10">10 Essays / Day</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="practice-grid" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px;">
+        <!-- Daily Tracker Level (Left Side) -->
+        <div style="border-right: 1px solid var(--border-color); padding-right: 24px;" id="tracker-left">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary);">Today's Submissions</span>
+            <span id="daily-progress-ratio" style="font-size: 0.95rem; font-weight: 700; color: var(--primary-accent);">0 / 5 Completed</span>
+          </div>
+          <!-- Real-time Progress Bar -->
+          <div style="height: 12px; background-color: var(--surface-color); border-radius: 9999px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--border-color); padding: 1px;">
+            <div id="daily-progress-bar" style="width: 0%; height: 100%; border-radius: 9999px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));"></div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.45;" id="tracker-motivational-msg">
+            Set target and write essays to perfect your Academic IELTS vocabulary and accuracy. Minimum 5 to 10 essays a day has been proven to secure Band 7.5+!
+          </p>
+        </div>
+
+        <!-- Saved Essay History List (Right Side) -->
+        <div style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary);">Evaluated History</span>
+            <button type="button" id="btn-clear-history" style="font-size: 0.75rem; background: none; border: none; color: var(--danger-color); cursor: pointer; text-decoration: underline; padding: 0;" onclick="clearPracticeHistory()">Clear History</button>
+          </div>
+          <div id="history-list" style="max-height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
+            <div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; padding: 20px 0; border: 1px dashed var(--border-color); border-radius: 6px;">No practice essays recorded yet today.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Tab Selector -->
+    <nav class="task-selector">
+      <button class="task-tab active" data-task="1" id="tab-task-1">Task 1 — Academic Writing</button>
+      <button class="task-tab" data-task="2" id="tab-task-2">Task 2 — Essay</button>
+    </nav>
+
+    <!-- Practice Timer Card -->
+    <div class="timer-card" id="practice-timer-card">
+      <div class="timer-header">
+        <span class="timer-task-label" id="timer-task-label">TASK 1 PRACTICE TIMELINE</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="timer-pulse-dot" id="timer-pulse"></div>
+          <span class="timer-status-badge" id="timer-status-badge">READY</span>
+        </div>
+      </div>
+      <div class="timer-body">
+        <div class="timer-display" id="timer-display">00:00</div>
+        <div class="timer-controls">
+          <button type="button" class="timer-btn btn-play" id="btn-timer-start-pause" onclick="toggleTimer()" title="Start / Pause session">
+            <!-- Play Symbol -->
+            <svg id="timer-play-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <!-- Pause Symbol -->
+            <svg id="timer-pause-icon" style="display: none;" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+            <span id="timer-play-text">Start</span>
+          </button>
+          
+          <button type="button" class="timer-btn btn-stop" id="btn-timer-stop" onclick="stopTimer()" title="Stop session and lock time" disabled>
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16"></rect>
+            </svg>
+            Stop
+          </button>
+          
+          <button type="button" class="timer-btn btn-delete" id="btn-timer-delete" onclick="resetTimer()" title="Reset / Delete elapsed time">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Reset
+          </button>
+        </div>
+      </div>
+      <div class="timer-recorded-info" id="timer-recorded-info" style="display: none;">
+        <span>Session locked. Your next writing report will record exactly <strong id="timer-summary-val">0m 0s</strong>.</span>
+      </div>
+    </div>
+
+    <!-- Task 1 Input Form -->
+    <section id="task-1-container">
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">Upload the chart, graph, map, or diagram</label>
+          <input type="file" id="image-file-input" accept="image/jpeg, image/png, image/webp" style="display: none;">
+          <div class="drop-zone" id="drop-zone">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="var(--text-secondary)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px auto; display: block;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <div class="upload-title">Drag & drop image here or click to browse</div>
+            <div class="upload-subtext">Supported formats: JPG, PNG, WEBP</div>
+          </div>
+          <div class="help-text id-error" style="color: var(--danger-color); display: none; margin-top: 4px;" id="upload-error">Please upload a valid JPG, PNG, or WEBP image.</div>
+
+          <!-- Image Preview Area -->
+          <div class="image-preview-container" id="image-preview-container">
+            <div class="image-preview-info">
+              <img id="image-preview-thumbnail" src="" alt="Thumbnail preview">
+              <span class="image-preview-name" id="image-preview-name">file_name.jpg</span>
+            </div>
+            <button type="button" class="btn-remove-image" id="btn-remove-preview" title="Remove image">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="t1-context" class="form-label">Additional context or instructions (optional)</label>
+          <textarea id="t1-context" rows="3" class="form-control" placeholder="e.g. The chart shows global CO2 emissions from 1990 to 2020."></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label for="t1-response" class="form-label" style="margin-bottom: 0;">Your Response <span id="t1-autosave-status" class="autosave-text" style="display: none;">● Autosaved</span></label>
+            <button type="button" class="btn-clear-draft" onclick="clearDraft('1')">Clear Draft</button>
+          </div>
+          <textarea id="t1-response" class="form-control" style="min-height: 220px;" placeholder="Write your Task 1 response here..."></textarea>
+          <div class="word-counter-wrapper">
+            <span class="word-counter" id="t1-word-count">0 words</span>
+            <span class="target-badge" id="t1-target-badge">Target: 150</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task 2 Input Form -->
+    <section id="task-2-container" style="display: none;">
+      <div class="card">
+        <div class="form-group">
+          <label for="t2-question" class="form-label">Essay Question</label>
+          <textarea id="t2-question" rows="4" class="form-control" placeholder="Paste the full IELTS Task 2 question here..."></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label for="t2-essay" class="form-label" style="margin-bottom: 0;">Your Essay <span id="t2-autosave-status" class="autosave-text" style="display: none;">● Autosaved</span></label>
+            <button type="button" class="btn-clear-draft" onclick="clearDraft('2')">Clear Draft</button>
+          </div>
+          <textarea id="t2-essay" class="form-control" style="min-height: 300px;" placeholder="Write your Task 2 essay here..."></textarea>
+          <div class="word-counter-wrapper">
+            <span class="word-counter" id="t2-word-count">0 words</span>
+            <span class="target-badge" id="t2-target-badge">Target: 250</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Evaluate Button -->
+    <button class="btn-evaluate" id="btn-evaluate" disabled>
+      <svg class="spinner" id="btn-spinner" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+      </svg>
+      <span id="btn-text">Evaluate My Writing</span>
+    </button>
+
+    <!-- General Error Banner -->
+    <div class="alert-banner" id="general-error-card" style="margin-top: 24px;">
+      <div class="alert-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--danger-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        Evaluation Failed
+      </div>
+      <p style="font-size: 0.9rem; margin-top: 4px; padding-left: 26px;" id="general-error-msg">An error occurred during evaluation.</p>
+      
+      <!-- Overload Recovery with Retry mechanism -->
+      <div id="service-overloaded-container" style="display: none; margin-top: 14px; margin-left: 26px; padding: 14px; background-color: rgba(67, 56, 202, 0.08); border: 1px solid rgba(67, 56, 202, 0.15); border-radius: 8px;">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 6px;">💡 Daily Limits & High Demand Recovery</span>
+        <span style="font-size: 0.82rem; color: var(--text-secondary); display: block; margin-bottom: 12px; line-height: 1.45;">
+          The underlying free AI servers are currently processing thousands of practice essays. Since your original draft was <strong>safely autosaved</strong>, you will not lose any work. Let's try again in a few seconds to bypass this temporary traffic spike.
+        </span>
+        <button id="btn-retry-eval" type="button" class="btn" style="min-height: auto; padding: 8px 16px; font-size: 0.85rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent)); color: #ffffff; border: none;">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span id="retry-btn-label">Retry Evaluation</span>
+        </button>
+      </div>
+
+      <div id="raw-response-wrapper" style="display: none; margin-top: 12px; padding-left: 26px;">
+        <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 6px;">Raw AI Response Payload</span>
+        <pre id="raw-response-content" style="white-space: pre-wrap; word-break: break-all; background-color: var(--surface-color); padding: 12px; border: 1px solid var(--border-color); border-radius: var(--btn-radius); font-family: monospace; font-size: 0.85rem; max-height: 250px; overflow-y: auto; color: var(--text-primary);"></pre>
+      </div>
+    </div>
+
+    <!-- RESULTS PRESENTATION SECTION -->
+    <section class="results-container" id="results-wrapper">
+      
+      <!-- Section 1 — Overall Band Score -->
+      <h2 class="section-title">Overall Score</h2>
+      <div class="card overall-card">
+        <div class="overall-label">Overall Band Score</div>
+        <div class="band-score-num" id="overall-band-score">0.0</div>
+        
+        <div class="band-scale-bar">
+          <div class="band-scale-marker" id="scale-marker"></div>
+        </div>
+        <div class="band-scale-labels">
+          <span>1.0</span>
+          <span>3.0</span>
+          <span>5.0</span>
+          <span>7.0</span>
+          <span>9.0</span>
+        </div>
+
+        <!-- Session Stats Section -->
+        <div style="display: flex; justify-content: center; gap: 32px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 14px 0; margin: 24px 0; font-size: 0.9rem;">
+          <div style="text-align: center;">
+            <div style="color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Words Written</div>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 1.15rem;" id="report-word-count">0 words</div>
+          </div>
+          <div style="width: 1px; background-color: var(--border-color); height: 32px;"></div>
+          <div style="text-align: center;">
+            <div style="color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Time Taken</div>
+            <div style="font-weight: 700; color: var(--primary-accent); font-size: 1.15rem; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-accent);">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span id="report-time-spent-val">Not timed</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="overall-summary" id="overall-summary-text"></p>
+      </div>
+
+      <!-- Section 2 — Criteria Breakdown -->
+      <h2 class="section-title">Criteria Assessment</h2>
+      <div class="criteria-grid">
+        <div class="card criteria-card">
+          <div class="criteria-header">
+            <span class="criteria-name">Task Achievement</span>
+            <span class="criteria-band" id="band-crit-ta">0.0</span>
+          </div>
+          <p class="criteria-justification" id="just-crit-ta"></p>
+        </div>
+        <div class="card criteria-card">
+          <div class="criteria-header">
+            <span class="criteria-name">Coherence & Cohesion</span>
+            <span class="criteria-band" id="band-crit-cc">0.0</span>
+          </div>
+          <p class="criteria-justification" id="just-crit-cc"></p>
+        </div>
+        <div class="card criteria-card">
+          <div class="criteria-header">
+            <span class="criteria-name">Lexical Resource</span>
+            <span class="criteria-band" id="band-crit-lr">0.0</span>
+          </div>
+          <p class="criteria-justification" id="just-crit-lr"></p>
+        </div>
+        <div class="card criteria-card">
+          <div class="criteria-header">
+            <span class="criteria-name">Grammatical Range & Accuracy</span>
+            <span class="criteria-band" id="band-crit-gra">0.0</span>
+          </div>
+          <p class="criteria-justification" id="just-crit-gra"></p>
+        </div>
+      </div>
+
+      <!-- Section 3 — Line-by-Line Feedback -->
+      <h2 class="section-title">Sentence-Level Feedback</h2>
+      <div class="card" style="padding: 12px 24px;">
+        <div id="sentence-feedback-list">
+          <!-- Dynamically inserted details rows -->
+        </div>
+      </div>
+
+      <!-- Section 4 — Grammar Errors Summary -->
+      <div id="grammar-errors-section" style="display: none;">
+        <h2 class="section-title">Grammar & Language Errors</h2>
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-responsive">
+            <table class="grammar-table">
+              <thead>
+                <tr>
+                  <th style="width: 30%;">Error</th>
+                  <th style="width: 40%;">Explanation</th>
+                  <th style="width: 30%;">Correction</th>
+                </tr>
+              </thead>
+              <tbody id="grammar-errors-tbody">
+                <!-- Dynamically inserted tr -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 — Strengths & Areas to Improve -->
+      <h2 class="section-title">Analytical Profile</h2>
+      <div class="card strengths-grid">
+        <div class="strengths-column">
+          <h3 style="font-size: 1rem; font-weight: 600; color: var(--success-color);">Core Strengths</h3>
+          <ul class="bullet-list" id="strengths-list"></ul>
+        </div>
+        <div class="weakness-column">
+          <h3 style="font-size: 1rem; font-weight: 600; color: var(--warning-color);">Areas to Improve</h3>
+          <ul class="bullet-list" id="improvements-list"></ul>
+        </div>
+      </div>
+
+      <!-- Start New Evaluation -->
+      <button class="btn-reset" onclick="resetForm()">Start New Evaluation</button>
+    </section>
+
+  </main>
+  </div> <!-- #page-app -->
+
+  <script>
+    // Global Form & Upload States
+    let activeTask = "1";
+    let loadedImageBase64 = null;
+    let loadedImageMediaType = null;
+
+    // Global Timer State
+    let timerState = {
+      "1": { seconds: 0, isRunning: false, interval: null, isStoppedManual: false },
+      "2": { seconds: 0, isRunning: false, interval: null, isStoppedManual: false }
+    };
+
+    function startTimer() {
+      const state = timerState[activeTask];
+      if (state.isRunning) return;
+      
+      state.isRunning = true;
+      state.isStoppedManual = false;
+      
+      updateTimerUI();
+
+      state.interval = setInterval(() => {
+        state.seconds++;
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      const state = timerState[activeTask];
+      if (!state.isRunning) return;
+      
+      if (state.interval) {
+        clearInterval(state.interval);
+        state.interval = null;
+      }
+      state.isRunning = false;
+      
+      updateTimerUI();
+    }
+
+    function toggleTimer() {
+      const state = timerState[activeTask];
+      if (state.isRunning) {
+        pauseTimer();
+      } else {
+        startTimer();
+      }
+    }
+
+    function stopTimer() {
+      const state = timerState[activeTask];
+      pauseTimer();
+      state.isStoppedManual = true;
+      updateTimerUI();
+    }
+
+    function resetTimer() {
+      const state = timerState[activeTask];
+      pauseTimer();
+      state.seconds = 0;
+      state.isStoppedManual = false;
+      updateTimerDisplay();
+      updateTimerUI();
+    }
+
+    function updateTimerDisplay() {
+      const state = timerState[activeTask];
+      const min = Math.floor(state.seconds / 60);
+      const sec = state.seconds % 60;
+      const formattedMin = String(min).padStart(2, "0");
+      const formattedSec = String(sec).padStart(2, "0");
+      const displayEl = document.getElementById("timer-display");
+      if (displayEl) {
+        displayEl.textContent = `${formattedMin}:${formattedSec}`;
+      }
+    }
+
+    function updateTimerUI() {
+      const state = timerState[activeTask];
+      const statusBadge = document.getElementById("timer-status-badge");
+      const pulseDot = document.getElementById("timer-pulse");
+      const playIcon = document.getElementById("timer-play-icon");
+      const pauseIcon = document.getElementById("timer-pause-icon");
+      const playText = document.getElementById("timer-play-text");
+      const stopBtn = document.getElementById("btn-timer-stop");
+      const footer = document.getElementById("timer-recorded-info");
+      const summaryVal = document.getElementById("timer-summary-val");
+      const taskLabel = document.getElementById("timer-task-label");
+
+      if (!statusBadge || !pulseDot || !playIcon || !pauseIcon || !playText || !stopBtn || !footer || !summaryVal || !taskLabel) return;
+
+      // Update Task Label
+      taskLabel.textContent = `TASK ${activeTask} PRACTICE TIMELINE`;
+
+      // Update Statuses
+      if (state.isRunning) {
+        statusBadge.textContent = "WRITING NOW";
+        statusBadge.className = "timer-status-badge active";
+        pulseDot.className = "timer-pulse-dot active";
+        
+        playIcon.style.display = "none";
+        pauseIcon.style.display = "inline-block";
+        playText.textContent = "Pause";
+        
+        stopBtn.disabled = false;
+        footer.style.display = "none";
+      } else if (state.isStoppedManual) {
+        statusBadge.textContent = "ESSAY LOCKED";
+        statusBadge.className = "timer-status-badge stopped";
+        pulseDot.className = "timer-pulse-dot stopped";
+        
+        playIcon.style.display = "inline-block";
+        pauseIcon.style.display = "none";
+        playText.textContent = "Resume";
+        
+        stopBtn.disabled = true;
+        
+        footer.style.display = "block";
+        const min = Math.floor(state.seconds / 60);
+        const sec = state.seconds % 60;
+        summaryVal.textContent = `${min}m ${sec}s`;
+      } else if (state.seconds > 0) {
+        statusBadge.textContent = "PAUSED";
+        statusBadge.className = "timer-status-badge paused";
+        pulseDot.className = "timer-pulse-dot paused";
+        
+        playIcon.style.display = "inline-block";
+        pauseIcon.style.display = "none";
+        playText.textContent = "Resume";
+        
+        stopBtn.disabled = false;
+        footer.style.display = "none";
+      } else {
+        statusBadge.textContent = "READY";
+        statusBadge.className = "timer-status-badge";
+        pulseDot.className = "timer-pulse-dot";
+        
+        playIcon.style.display = "inline-block";
+        pauseIcon.style.display = "none";
+        playText.textContent = "Start";
+        
+        stopBtn.disabled = true;
+        footer.style.display = "none";
+      }
+      
+      updateTimerDisplay();
+    }
+
+    function formatTimeTaken(seconds) {
+      if (!seconds) return "Not timed";
+      const min = Math.floor(seconds / 60);
+      const sec = seconds % 60;
+      if (min === 0) {
+        return `${sec}s`;
+      }
+      return `${min}m ${sec}s`;
+    }
+
+    // Expose timer control endpoints
+    window.toggleTimer = toggleTimer;
+    window.stopTimer = stopTimer;
+    window.resetTimer = resetTimer;
+
+    // View Routing system
+    function navigateTo(target) {
+      const pageHome = document.getElementById("page-home");
+      const pageApp = document.getElementById("page-app");
+      if (!pageHome || !pageApp) return;
+
+      if (target === "home") {
+        pageApp.style.display = "none";
+        pageHome.style.display = "block";
+        window.scrollTo({ top: 0 });
+      } else {
+        pageHome.style.display = "none";
+        pageApp.style.display = "block";
+        window.scrollTo({ top: 0 });
+      }
+    }
+    window.navigateTo = navigateTo;
+
+    // Initialize layout and state hooks
+    document.addEventListener("DOMContentLoaded", () => {
+      initTheme();
+      initTaskToggle();
+      initDragAndDrop();
+      initAutoExpandTextareas();
+      initInputsValidation();
+      loadDraftsOnStartup();
+      loadPracticeTracker();
+
+      const startWritingBtn = document.getElementById("btn-start-writing");
+      if (startWritingBtn) {
+        startWritingBtn.addEventListener("click", () => {
+          navigateTo("app");
+        });
+      }
+
+      const retryBtn = document.getElementById("btn-retry-eval");
+      if (retryBtn) {
+        retryBtn.addEventListener("click", () => {
+          if (retryTimer) {
+            clearInterval(retryTimer);
+            retryTimer = null;
+          }
+          const label = document.getElementById("retry-btn-label");
+          if (label) label.textContent = "Retrying now...";
+          runEvaluation();
+        });
+      }
+    });
+
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem("ielts-theme") || "light";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      updateThemeIcon(savedTheme);
+
+      const btn = document.getElementById("theme-toggle-btn");
+      btn.addEventListener("click", () => {
+        const theme = document.documentElement.getAttribute("data-theme");
+        const nextTheme = theme === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", nextTheme);
+        localStorage.setItem("ielts-theme", nextTheme);
+        updateThemeIcon(nextTheme);
+      });
+    }
+
+    function updateThemeIcon(theme) {
+      const sun = document.getElementById("theme-icon-sun");
+      const moon = document.getElementById("theme-icon-moon");
+      if (theme === "light") {
+        sun.style.display = "none";
+        moon.style.display = "block";
+      } else {
+        sun.style.display = "block";
+        moon.style.display = "none";
+      }
+    }
+
+    // Task tabs selection toggler (switching preserves draft fields so users can swap freely)
+    function initTaskToggle() {
+      const t1Tab = document.getElementById("tab-task-1");
+      const t2Tab = document.getElementById("tab-task-2");
+
+      t1Tab.addEventListener("click", () => {
+        if (activeTask !== "1") {
+          activeTask = "1";
+          updateActiveTabUI();
+        }
+      });
+
+      t2Tab.addEventListener("click", () => {
+        if (activeTask !== "2") {
+          activeTask = "2";
+          updateActiveTabUI();
+        }
+      });
+    }
+
+    // PRACTICE HUB, DAILY PROGRESS & AUTOSAVE UTILITIES
+    function loadDraftsOnStartup() {
+      try {
+        // Load Task 1 drafts
+        const savedContext = localStorage.getItem("ielts_draft_t1_context");
+        if (savedContext !== null) {
+          document.getElementById("t1-context").value = savedContext;
+        }
+        const savedT1Resp = localStorage.getItem("ielts_draft_t1_response");
+        if (savedT1Resp !== null) {
+          document.getElementById("t1-response").value = savedT1Resp;
+          t1ResponseTrigger();
+        }
+
+        // Load Task 2 drafts
+        const savedT2Quest = localStorage.getItem("ielts_draft_t2_question");
+        if (savedT2Quest !== null) {
+          document.getElementById("t2-question").value = savedT2Quest;
+        }
+        const savedT2Essay = localStorage.getItem("ielts_draft_t2_response");
+        if (savedT2Essay !== null) {
+          document.getElementById("t2-essay").value = savedT2Essay;
+          t2EssayTrigger();
+        }
+
+        // Adjust heights of autoexpanded areas
+        const textareas = document.querySelectorAll("textarea");
+        textareas.forEach(ta => autoExpand(ta));
+        validateInputs();
+      } catch (err) {
+        console.warn("Could not reload active draft states:", err);
+      }
+    }
+
+    function t1ResponseTrigger() {
+      const t1Resp = document.getElementById("t1-response");
+      const count = countWords(t1Resp.value);
+      const countTxt = document.getElementById("t1-word-count");
+      const badge = document.getElementById("t1-target-badge");
+      
+      countTxt.textContent = `${count} words`;
+      if (count >= 150) {
+        countTxt.classList.add("target-met");
+        badge.classList.add("met");
+      } else {
+        countTxt.classList.remove("target-met");
+        badge.classList.remove("met");
+      }
+
+      const saveStatus = document.getElementById("t1-autosave-status");
+      if (t1Resp.value.trim().length > 0) {
+        saveStatus.style.display = "inline-flex";
+      } else {
+        saveStatus.style.display = "none";
+      }
+    }
+
+    function t2EssayTrigger() {
+      const t2Essay = document.getElementById("t2-essay");
+      const count = countWords(t2Essay.value);
+      const countTxt = document.getElementById("t2-word-count");
+      const badge = document.getElementById("t2-target-badge");
+      
+      countTxt.textContent = `${count} words`;
+      if (count >= 250) {
+        countTxt.classList.add("target-met");
+        badge.classList.add("met");
+      } else {
+        countTxt.classList.remove("target-met");
+        badge.classList.remove("met");
+      }
+
+      const saveStatus = document.getElementById("t2-autosave-status");
+      if (t2Essay.value.trim().length > 0) {
+        saveStatus.style.display = "inline-flex";
+      } else {
+        saveStatus.style.display = "none";
+      }
+    }
+
+    function clearDraft(taskType) {
+      if (taskType === "1") {
+        document.getElementById("t1-context").value = "";
+        document.getElementById("t1-response").value = "";
+        localStorage.removeItem("ielts_draft_t1_context");
+        localStorage.removeItem("ielts_draft_t1_response");
+        t1ResponseTrigger();
+        autoExpand(document.getElementById("t1-context"));
+        autoExpand(document.getElementById("t1-response"));
+      } else {
+        document.getElementById("t2-question").value = "";
+        document.getElementById("t2-essay").value = "";
+        localStorage.removeItem("ielts_draft_t2_question");
+        localStorage.removeItem("ielts_draft_t2_response");
+        t2EssayTrigger();
+        autoExpand(document.getElementById("t2-question"));
+        autoExpand(document.getElementById("t2-essay"));
+      }
+
+      // Reset associated timer state and interval
+      const state = timerState[taskType];
+      if (state) {
+        if (state.interval) {
+          clearInterval(state.interval);
+          state.interval = null;
+        }
+        state.isRunning = false;
+        state.seconds = 0;
+        state.isStoppedManual = false;
+        if (taskType === activeTask) {
+          updateTimerDisplay();
+          updateTimerUI();
+        }
+      }
+
+      validateInputs();
+    }
+
+    function loadPracticeTracker() {
+      try {
+        const dailyGoal = localStorage.getItem("ielts_daily_goal") || "5";
+        document.getElementById("daily-goal-select").value = dailyGoal;
+        renderPracticeHistory();
+      } catch (err) {
+        console.warn("Unable to load goals:", err);
+      }
+    }
+
+    function updateDailyGoalTarget(value) {
+      localStorage.setItem("ielts_daily_goal", value);
+      renderPracticeHistory();
+    }
+
+    function getHistory() {
+      const histStr = localStorage.getItem("ielts_history");
+      if (!histStr) return [];
+      try {
+        return JSON.parse(histStr);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveToHistoryList(evaluationData) {
+      try {
+        const history = getHistory();
+        const activeTaskType = activeTask;
+        const t1ContextVal = document.getElementById("t1-context").value;
+        const t1ResponseVal = document.getElementById("t1-response").value;
+        const t2QuestionVal = document.getElementById("t2-question").value;
+        const t2EssayVal = document.getElementById("t2-essay").value;
+
+        const essayTxt = activeTaskType === "1" ? t1ResponseVal : t2EssayVal;
+        const wordCount = countWords(essayTxt);
+        const secondsSpent = timerState[activeTaskType].seconds;
+        
+        const newEntry = {
+          id: Date.now().toString(),
+          timestamp: Date.now(),
+          dateStr: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+          task: activeTaskType,
+          title: activeTaskType === "1" ? (t1ContextVal.trim() || `Graph Analysis Task 1`) : (t2QuestionVal.trim() || `Essay Question Task 2`),
+          essayText: essayTxt,
+          score: parseFloat(evaluationData.overall_band) || 0,
+          word_count: wordCount,
+          seconds_spent: secondsSpent,
+          payload: evaluationData
+        };
+
+        history.unshift(newEntry);
+        // Retain only last 50 evaluations to keep clean local footprint
+        if (history.length > 50) {
+          history.pop();
+        }
+
+        localStorage.setItem("ielts_history", JSON.stringify(history));
+        renderPracticeHistory();
+      } catch (err) {
+        console.warn("Could not append history item:", err);
+      }
+    }
+
+    function renderPracticeHistory() {
+      const history = getHistory();
+      const goalSelect = parseInt(localStorage.getItem("ielts_daily_goal") || "5");
+
+      // Set target window beginning from local Midnight today
+      const startOfToday = new Date();
+      startOfToday.setHours(0,0,0,0);
+      const todayTimestamp = startOfToday.getTime();
+      const essaysDoneToday = history.filter(item => item.timestamp >= todayTimestamp).length;
+
+      const ratioLabel = document.getElementById("daily-progress-ratio");
+      if (ratioLabel) {
+        ratioLabel.textContent = `${essaysDoneToday} / ${goalSelect} Completed`;
+      }
+
+      const barPercent = Math.min((essaysDoneToday / goalSelect) * 100, 100);
+      const progressBar = document.getElementById("daily-progress-bar");
+      if (progressBar) {
+        progressBar.style.width = `${barPercent}%`;
+      }
+
+      const motivationalMsg = document.getElementById("tracker-motivational-msg");
+      if (motivationalMsg) {
+        if (essaysDoneToday === 0) {
+          motivationalMsg.textContent = `Choose Task 1 or Task 2 and start practicing. Perfecting 5 to 10 essays a day has been proven to secure Band 7.5+!`;
+        } else if (essaysDoneToday < goalSelect) {
+          motivationalMsg.textContent = `Superb! You have completed ${essaysDoneToday} writing tests today. Keep it up to achieve your goals! ✍️`;
+        } else {
+          motivationalMsg.textContent = `Sensational! Daily writing target REACHED! 🎉 You completed ${essaysDoneToday} tests today. You are making giant leaps toward Band 8.5!`;
+        }
+      }
+
+      const historyList = document.getElementById("history-list");
+      if (!historyList) return;
+
+      historyList.innerHTML = "";
+      if (history.length === 0) {
+        historyList.innerHTML = `<div style="text-align: center; color: var(--text-secondary); font-size: 0.82rem; padding: 18px 0; border: 1px dashed var(--border-color); border-radius: 6px; width: 100%;">No practice essays evaluated today.</div>`;
+        return;
+      }
+
+      history.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "history-item";
+        
+        let truncatedTitle = item.title;
+        if (truncatedTitle.length > 35) {
+          truncatedTitle = truncatedTitle.substring(0, 32) + "...";
+        }
+
+        let badgeClass = "score-weak";
+        if (item.score >= 7.0) badgeClass = "score-good";
+        else if (item.score >= 5.0) badgeClass = "score-avg";
+
+        row.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 62%;">
+            <span class="badge-score ${badgeClass}">B${item.score.toFixed(1)}</span>
+            <span style="font-weight: 500; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(item.title)}">${escapeHtml(truncatedTitle)}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" class="history-action-btn" onclick="reviewPastEvaluation('${item.id}')" title="Inspect report feedback">Review</button>
+            <button type="button" class="history-action-btn" onclick="reloadSavedDraftText('${item.id}')" style="color: var(--text-secondary);" title="Load Text back to active workspace">Polish</button>
+            <button type="button" class="history-delete-btn" onclick="deleteHistoryItem(event, '${item.id}')" title="Delete record">&times;</button>
+          </div>
+        `;
+        historyList.appendChild(row);
+      });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function deleteHistoryItem(event, id) {
+      if (event) event.stopPropagation();
+      let history = getHistory();
+      history = history.filter(item => item.id !== id);
+      localStorage.setItem("ielts_history", JSON.stringify(history));
+      renderPracticeHistory();
+    }
+
+    let clearHistoryClickedOnce = false;
+    let clearHistoryTimeout = null;
+
+    function clearPracticeHistory() {
+      const btn = document.getElementById("btn-clear-history");
+      if (!btn) return;
+
+      if (!clearHistoryClickedOnce) {
+        clearHistoryClickedOnce = true;
+        btn.textContent = "Confirm Clear?";
+        btn.style.color = "var(--danger-color)";
+        btn.style.fontWeight = "700";
+        
+        clearHistoryTimeout = setTimeout(() => {
+          clearHistoryClickedOnce = false;
+          btn.textContent = "Clear History";
+          btn.style.fontWeight = "normal";
+        }, 4000);
+      } else {
+        clearHistoryClickedOnce = false;
+        if (clearHistoryTimeout) clearTimeout(clearHistoryTimeout);
+        btn.textContent = "Clear History";
+        btn.style.fontWeight = "normal";
+        
+        localStorage.removeItem("ielts_history");
+        renderPracticeHistory();
+      }
+    }
+
+    function reviewPastEvaluation(id) {
+      const history = getHistory();
+      const item = history.find(x => x.id === id);
+      if (!item) return;
+
+      navigateTo("app");
+      activeTask = item.task;
+      updateActiveTabUI();
+
+      if (item.task === "1") {
+        document.getElementById("t1-context").value = item.title === "Graph Analysis Task 1" ? "" : item.title;
+        document.getElementById("t1-response").value = item.essayText;
+        t1ResponseTrigger();
+        autoExpand(document.getElementById("t1-context"));
+        autoExpand(document.getElementById("t1-response"));
+      } else {
+        document.getElementById("t2-question").value = item.title;
+        document.getElementById("t2-essay").value = item.essayText;
+        t2EssayTrigger();
+        autoExpand(document.getElementById("t2-question"));
+        autoExpand(document.getElementById("t2-essay"));
+      }
+
+      // Merge saved timer count & word count metadata into history payload so renderResults prints them exactly
+      const payloadWithMeta = Object.assign({}, item.payload, {
+        word_count: item.word_count,
+        seconds_spent: item.seconds_spent
+      });
+
+      renderResults(payloadWithMeta);
+    }
+
+    function reloadSavedDraftText(id) {
+      const history = getHistory();
+      const item = history.find(x => x.id === id);
+      if (!item) return;
+
+      navigateTo("app");
+      activeTask = item.task;
+      updateActiveTabUI();
+
+      if (item.task === "1") {
+        document.getElementById("t1-context").value = item.title === "Graph Analysis Task 1" ? "" : item.title;
+        document.getElementById("t1-response").value = item.essayText;
+        localStorage.setItem("ielts_draft_t1_context", item.title === "Graph Analysis Task 1" ? "" : item.title);
+        localStorage.setItem("ielts_draft_t1_response", item.essayText);
+        t1ResponseTrigger();
+        autoExpand(document.getElementById("t1-context"));
+        autoExpand(document.getElementById("t1-response"));
+      } else {
+        document.getElementById("t2-question").value = item.title;
+        document.getElementById("t2-essay").value = item.essayText;
+        localStorage.setItem("ielts_draft_t2_question", item.title);
+        localStorage.setItem("ielts_draft_t2_response", item.essayText);
+        t2EssayTrigger();
+        autoExpand(document.getElementById("t2-question"));
+        autoExpand(document.getElementById("t2-essay"));
+      }
+      
+      validateInputs();
+      window.scrollTo({ top: document.getElementById("practice-hub-card").offsetTop, behavior: "smooth" });
+    }
+
+    function updateActiveTabUI() {
+      const t1Tab = document.getElementById("tab-task-1");
+      const t2Tab = document.getElementById("tab-task-2");
+      const t1Sect = document.getElementById("task-1-container");
+      const t2Sect = document.getElementById("task-2-container");
+
+      if (activeTask === "1") {
+        t1Tab.classList.add("active");
+        t2Tab.classList.remove("active");
+        t1Sect.style.display = "block";
+        t2Sect.style.display = "none";
+      } else {
+        t1Tab.classList.remove("active");
+        t2Tab.classList.add("active");
+        t1Sect.style.display = "none";
+        t2Sect.style.display = "block";
+      }
+      validateInputs();
+      updateTimerUI();
+    }
+
+    // Drag-and-Drop + Image uploads
+    function initDragAndDrop() {
+      const dropZone = document.getElementById("drop-zone");
+      const fileInput = document.getElementById("image-file-input");
+      const removeBtn = document.getElementById("btn-remove-preview");
+
+      dropZone.addEventListener("click", () => fileInput.click());
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          processFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files && fileInput.files.length > 0) {
+          processFile(fileInput.files[0]);
+        }
+      });
+
+      removeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        clearPreviewState();
+      });
+    }
+
+    function processFile(file) {
+      const errorDiv = document.getElementById("upload-error");
+      errorDiv.style.display = "none";
+
+      const validTypes = ["image/jpeg", "image/png", "image/webp"];
+      if (!validTypes.includes(file.type)) {
+        errorDiv.style.display = "block";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        const commaIdx = result.indexOf(",");
+        loadedImageBase64 = result.substring(commaIdx + 1);
+        loadedImageMediaType = file.type;
+
+        // Render preview
+        document.getElementById("image-preview-thumbnail").src = result;
+        document.getElementById("image-preview-name").textContent = file.name;
+        document.getElementById("image-preview-container").style.display = "flex";
+        document.getElementById("drop-zone").style.display = "none";
+
+        validateInputs();
+      };
+      reader.onerror = () => {
+        errorDiv.textContent = "Error loading image file.";
+        errorDiv.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearPreviewState() {
+      loadedImageBase64 = null;
+      loadedImageMediaType = null;
+      document.getElementById("image-file-input").value = "";
+      document.getElementById("image-preview-container").style.display = "none";
+      document.getElementById("drop-zone").style.display = "block";
+      document.getElementById("upload-error").style.display = "none";
+      validateInputs();
+    }
+
+    // Autoexpand Textareas
+    function initAutoExpandTextareas() {
+      const textareas = document.querySelectorAll("textarea");
+      textareas.forEach(textarea => {
+        textarea.addEventListener("input", function() {
+          autoExpand(this);
+        });
+        autoExpand(textarea);
+      });
+    }
+
+    function autoExpand(el) {
+      el.style.height = "auto";
+      el.style.height = el.scrollHeight + "px";
+    }
+
+    // Word counter and real-time input verification checks
+    function initInputsValidation() {
+      const t1Context = document.getElementById("t1-context");
+      const t1Resp = document.getElementById("t1-response");
+      const t2Quest = document.getElementById("t2-question");
+      const t2Essay = document.getElementById("t2-essay");
+
+      t1Context.addEventListener("input", () => {
+        localStorage.setItem("ielts_draft_t1_context", t1Context.value);
+        validateInputs();
+      });
+
+      t1Resp.addEventListener("input", () => {
+        t1ResponseTrigger();
+        localStorage.setItem("ielts_draft_t1_response", t1Resp.value);
+        validateInputs();
+        
+        // Auto-start Timer if writing begins, not already running and not manually locked
+        if (t1Resp.value.trim().length > 0 && !timerState["1"].isRunning && !timerState["1"].isStoppedManual) {
+          startTimer();
+        }
+      });
+
+      t2Quest.addEventListener("input", () => {
+        localStorage.setItem("ielts_draft_t2_question", t2Quest.value);
+        validateInputs();
+      });
+
+      t2Essay.addEventListener("input", () => {
+        t2EssayTrigger();
+        localStorage.setItem("ielts_draft_t2_response", t2Essay.value);
+        validateInputs();
+        
+        // Auto-start Timer if writing begins, not already running and not manually locked
+        if (t2Essay.value.trim().length > 0 && !timerState["2"].isRunning && !timerState["2"].isStoppedManual) {
+          startTimer();
+        }
+      });
+    }
+
+    function countWords(txt) {
+      if (!txt) return 0;
+      const clean = txt.trim();
+      if (!clean) return 0;
+      return clean.split(/\s+/).filter(Boolean).length;
+    }
+
+    // Validate inputs
+    function validateInputs() {
+      const evaluateBtn = document.getElementById("btn-evaluate");
+
+      let valid = false;
+      if (activeTask === "1") {
+        const textVal = document.getElementById("t1-response").value.trim();
+        valid = textVal.length > 0;
+      } else {
+        const questVal = document.getElementById("t2-question").value.trim();
+        const textVal = document.getElementById("t2-essay").value.trim();
+        valid = questVal.length > 0 && textVal.length > 0;
+      }
+      evaluateBtn.disabled = !valid;
+    }
+
+    function clearAllFields() {
+      // Clear values Task 1
+      clearPreviewState();
+      document.getElementById("t1-context").value = "";
+      document.getElementById("t1-response").value = "";
+      localStorage.removeItem("ielts_draft_t1_context");
+      localStorage.removeItem("ielts_draft_t1_response");
+      t1ResponseTrigger();
+
+      // Clear values Task 2
+      document.getElementById("t2-question").value = "";
+      document.getElementById("t2-essay").value = "";
+      localStorage.removeItem("ielts_draft_t2_question");
+      localStorage.removeItem("ielts_draft_t2_response");
+      t2EssayTrigger();
+
+      // Reset sizes
+      autoExpand(document.getElementById("t1-context"));
+      autoExpand(document.getElementById("t1-response"));
+      autoExpand(document.getElementById("t2-question"));
+      autoExpand(document.getElementById("t2-essay"));
+
+      // Collapse display
+      document.getElementById("results-wrapper").style.display = "none";
+      document.getElementById("general-error-card").style.display = "none";
+    }
+
+    // Reset whole visual state back to top
+    function resetForm() {
+      clearAllFields();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // API Call & Parsing Logic
+    const evaluateBtn = document.getElementById("btn-evaluate");
+    const loaderSpinner = document.getElementById("btn-spinner");
+    const btnLabelText = document.getElementById("btn-text");
+
+    evaluateBtn.addEventListener("click", () => {
+      runEvaluation();
+    });
+
+    async function runEvaluation() {
+      // Freeze writing session stopwatch timer at submission moment
+      pauseTimer();
+
+      setLoadingState(true);
+
+      // Reset result views
+      document.getElementById("results-wrapper").style.display = "none";
+      document.getElementById("general-error-card").style.display = "none";
+
+      try {
+        let requestBody = {
+          activeTask: activeTask,
+          response: "",
+          context: "",
+          question: "",
+          image: null
+        };
+
+        if (activeTask === "1") {
+          requestBody.response = document.getElementById("t1-response").value;
+          requestBody.context = document.getElementById("t1-context").value || "";
+          
+          if (loadedImageBase64) {
+            requestBody.image = {
+              base64: loadedImageBase64,
+              mediaType: loadedImageMediaType
+            };
+          }
+        } else {
+          requestBody.question = document.getElementById("t2-question").value;
+          requestBody.response = document.getElementById("t2-essay").value;
+        }
+
+        const response = await fetch("/api/evaluate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error || `Evaluation Server Error: Status ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderResults(data);
+        saveToHistoryList(data);
+
+      } catch (err) {
+        showErrorBanner(err.message);
+      } finally {
+        setLoadingState(false);
+      }
+    }
+
+    function setLoadingState(isLoading) {
+      if (isLoading) {
+        evaluateBtn.disabled = true;
+        loaderSpinner.style.display = "inline";
+        btnLabelText.textContent = "Analysing your response...";
+      } else {
+        loaderSpinner.style.display = "none";
+        btnLabelText.textContent = "Evaluate My Writing";
+        validateInputs();
+      }
+    }
+
+    function parseJsonText(rawText) {
+      let clean = rawText.trim();
+      const codeBlockMatch = clean.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+      if (codeBlockMatch) {
+        clean = codeBlockMatch[1];
+      }
+      return JSON.parse(clean);
+    }
+
+    let retryTimer = null;
+    function startRetryCountdown(seconds) {
+      if (retryTimer) clearInterval(retryTimer);
+      const btn = document.getElementById("btn-retry-eval");
+      const label = document.getElementById("retry-btn-label");
+      if (!btn || !label) return;
+      
+      btn.style.opacity = "0.7";
+      btn.style.pointerEvents = "none";
+      btn.disabled = true;
+      let remaining = seconds;
+      
+      label.textContent = `Wait ${remaining}s before retrying...`;
+      
+      retryTimer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(retryTimer);
+          retryTimer = null;
+          btn.style.opacity = "1";
+          btn.style.pointerEvents = "auto";
+          btn.disabled = false;
+          label.textContent = "Retry Evaluation Now";
+        } else {
+          label.textContent = `Wait ${remaining}s before retrying...`;
+        }
+      }, 1000);
+    }
+
+    function showErrorBanner(message) {
+      const errCard = document.getElementById("general-error-card");
+      document.getElementById("general-error-msg").textContent = message;
+      document.getElementById("raw-response-wrapper").style.display = "none";
+      
+      const retryContainer = document.getElementById("service-overloaded-container");
+      if (message.includes("503") || message.includes("demand") || message.includes("UNAVAILABLE") || message.includes("limit") || message.includes("Error") || message.includes("fail") || message.includes("failed") || message.includes("reached")) {
+        retryContainer.style.display = "block";
+        startRetryCountdown(5);
+      } else {
+        retryContainer.style.display = "none";
+      }
+
+      errCard.style.display = "block";
+      errCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function showJsonFailure(rawText, message) {
+      const errCard = document.getElementById("general-error-card");
+      document.getElementById("general-error-msg").textContent = "Failed to parse the JSON scores from the AI evaluation structure: " + message;
+      document.getElementById("raw-response-content").textContent = rawText;
+      document.getElementById("raw-response-wrapper").style.display = "block";
+      
+      const retryContainer = document.getElementById("service-overloaded-container");
+      retryContainer.style.display = "block";
+      startRetryCountdown(3);
+
+      errCard.style.display = "block";
+      errCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    // Render results dynamically
+    function renderResults(data) {
+      const wrapper = document.getElementById("results-wrapper");
+      wrapper.style.display = "block";
+
+      // Session Stats Rendering
+      let wordCount = data.word_count;
+      if (wordCount === undefined) {
+        const activeTextAreaId = (activeTask === "1") ? "t1-response" : "t2-essay";
+        const val = document.getElementById(activeTextAreaId).value;
+        wordCount = countWords(val);
+      }
+      
+      let secondsSpent = data.seconds_spent;
+      if (secondsSpent === undefined) {
+        secondsSpent = timerState[activeTask].seconds;
+      }
+      
+      const wordCountEl = document.getElementById("report-word-count");
+      if (wordCountEl) {
+        wordCountEl.textContent = `${wordCount} words`;
+      }
+      
+      const timeSpentEl = document.getElementById("report-time-spent-val");
+      if (timeSpentEl) {
+        timeSpentEl.textContent = formatTimeTaken(secondsSpent);
+      }
+
+      // 1. Overall Score Display
+      const overallVal = parseFloat(data.overall_band) || 0;
+      const bandScoreNum = document.getElementById("overall-band-score");
+      bandScoreNum.textContent = overallVal.toFixed(1);
+
+      // Color coding overall label
+      let colorClass = "color-danger";
+      let bgClass = "bg-danger";
+      if (overallVal >= 7.0) {
+        colorClass = "color-success";
+        bgClass = "bg-success";
+      } else if (overallVal >= 5.0) {
+        colorClass = "color-warning";
+        bgClass = "bg-warning";
+      }
+      bandScoreNum.className = "band-score-num " + colorClass;
+
+      // Position scale marker
+      // Percentage distance ranges from 1 to 9 -> (score - 1) / 8 * 100
+      let markPercent = 0;
+      if (overallVal >= 1 && overallVal <= 9) {
+        markPercent = ((overallVal - 1) / 8) * 100;
+      }
+      const marker = document.getElementById("scale-marker");
+      marker.style.left = `${markPercent}%`;
+      marker.className = "band-scale-marker " + bgClass;
+
+      // Summary text
+      document.getElementById("overall-summary-text").textContent = data.overall_summary || "";
+
+      // 2. Criteria Assessment Display
+      const criteriaMapping = [
+        { key: "task_achievement", bandId: "band-crit-ta", justId: "just-crit-ta" },
+        { key: "coherence_cohesion", bandId: "band-crit-cc", justId: "just-crit-cc" },
+        { key: "lexical_resource", bandId: "band-crit-lr", justId: "just-crit-lr" },
+        { key: "grammatical_range_accuracy", bandId: "band-crit-gra", justId: "just-crit-gra" }
+      ];
+
+      criteriaMapping.forEach(crit => {
+        const dataObj = data[crit.key];
+        const bandEl = document.getElementById(crit.bandId);
+        const justEl = document.getElementById(crit.justId);
+
+        if (dataObj && bandEl && justEl) {
+          const val = parseFloat(dataObj.band) || 0;
+          bandEl.textContent = val.toFixed(1);
+
+          let classVal = "color-danger";
+          if (val >= 7.0) classVal = "color-success";
+          else if (val >= 5.0) classVal = "color-warning";
+
+          bandEl.className = "criteria-band " + classVal;
+          justEl.textContent = dataObj.justification || "";
+        }
+      });
+
+      // 3. Line-by-Line visual lists
+      const sentenceList = document.getElementById("sentence-feedback-list");
+      sentenceList.innerHTML = "";
+
+      if (data.line_by_line_feedback && data.line_by_line_feedback.length > 0) {
+        data.line_by_line_feedback.forEach(item => {
+          let badgeClass = "badge-grammar";
+          const typeNormalized = (item.issue_type || "").toLowerCase();
+          if (typeNormalized.includes("vocab") || typeNormalized.includes("lexical")) badgeClass = "badge-vocabulary";
+          else if (typeNormalized.includes("coher") || typeNormalized.includes("cohes")) badgeClass = "badge-coherence";
+          else if (typeNormalized.includes("task") || typeNormalized.includes("achieve")) badgeClass = "badge-task";
+
+          const row = document.createElement("div");
+          row.className = "feedback-row";
+          row.innerHTML = `
+            <details class="feedback-details" open>
+              <summary>
+                <div class="feedback-row-header">
+                  <span class="original-text">${item.original_sentence || ""}</span>
+                  <span class="badge ${badgeClass}">${item.issue_type || "Grammar"}</span>
+                </div>
+                <svg class="chevron-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="feedback-body">
+                <div class="feedback-issue"><strong>Observations:</strong> ${item.issue || ""}</div>
+                <div class="corrected-box">
+                  <div class="corrected-title">Correction</div>
+                  <div class="corrected-text">${item.corrected_sentence || ""}</div>
+                </div>
+              </div>
+            </details>
+          `;
+          sentenceList.appendChild(row);
+        });
+      } else {
+        sentenceList.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 20px 0; font-size: 0.9rem;">No feedback required. Your sentence structures are natural, accurate, and descriptive.</p>`;
+      }
+
+      // 4. Grammar Errors list
+      const tbody = document.getElementById("grammar-errors-tbody");
+      const grammarSection = document.getElementById("grammar-errors-section");
+      tbody.innerHTML = "";
+
+      if (data.grammar_errors_summary && data.grammar_errors_summary.length > 0) {
+        grammarSection.style.display = "block";
+        data.grammar_errors_summary.forEach(item => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td style="color: var(--danger-color); font-weight: 500;">${item.error || ""}</td>
+            <td style="color: var(--text-secondary);">${item.explanation || ""}</td>
+            <td style="color: var(--success-color); font-weight: 500;">${item.correction || ""}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } else {
+        grammarSection.style.display = "none";
+      }
+
+      // 5. Strengths & Areas to Improve
+      const strengthsList = document.getElementById("strengths-list");
+      strengthsList.innerHTML = "";
+      if (data.strengths && data.strengths.length > 0) {
+        data.strengths.forEach(s => {
+          const li = document.createElement("li");
+          li.textContent = s;
+          strengthsList.appendChild(li);
+        });
+      } else {
+        strengthsList.innerHTML = "<li>Clear, readable expression.</li>";
+      }
+
+      const improveList = document.getElementById("improvements-list");
+      improveList.innerHTML = "";
+      if (data.improvement_areas && data.improvement_areas.length > 0) {
+        data.improvement_areas.forEach(i => {
+          const li = document.createElement("li");
+          li.textContent = i;
+          improveList.appendChild(li);
+        });
+      } else {
+        improveList.innerHTML = "<li>Draft and refine layouts at high speed.</li>";
+      }
+
+      // Scroll smoothly to results
+      setTimeout(() => {
+        wrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
+    }
+
+    // Expose interactive event handlers to the global window scope to avoid sandbox execution failures
+    window.clearPracticeHistory = clearPracticeHistory;
+    window.deleteHistoryItem = deleteHistoryItem;
+    window.reviewPastEvaluation = reviewPastEvaluation;
+    window.reloadSavedDraftText = reloadSavedDraftText;
+    window.updateDailyGoalTarget = updateDailyGoalTarget;
+    window.clearDraft = clearDraft;
+    window.resetForm = resetForm;
+  </script>
+</body>
+</html>
